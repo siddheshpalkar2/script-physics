@@ -1,0 +1,6 @@
+# Files `gcloud run deploy --source .` should not upload or bake into the image.
+.gcloudignore
+venv/
+__pycache__/
+.env
+test_budget.py

@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-desk text-ink font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+  }
+  ::placeholder {
+    color: #94a3b8;
+  }
+}
+
+@layer components {
+  /* Level 1 surface: white card, hairline border, ambient shadow. */
+  .card {
+    @apply rounded-card border border-line bg-page shadow-sheet;
+  }
+  .field {
+    @apply rounded-lg border border-line-strong bg-page px-3 py-2.5 text-[15px] text-ink transition-[border-color,box-shadow] duration-150;
+  }
+  .field:focus {
+    @apply border-ledger outline-none ring-4 ring-ledger/10;
+  }
+  .btn-primary {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg bg-ledger px-5 py-2 text-[14px] font-semibold tracking-[-0.01em] text-white transition duration-150 hover:-translate-y-px hover:bg-ledger-dark hover:shadow-lift disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none;
+  }
+  .btn-secondary {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg border border-line bg-page px-4 py-2 text-[14px] font-semibold tracking-[-0.01em] text-ink transition duration-150 hover:border-line-strong hover:bg-mist disabled:opacity-50;
+  }
+  .btn-accent {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg bg-amber px-5 py-2 text-[14px] font-semibold text-white transition duration-150 hover:-translate-y-px hover:bg-amber-deep disabled:opacity-50;
+  }
+  /* Compact variant for in-table actions (Add episode, Add scene). */
+  .btn-sm {
+    @apply min-h-0 px-3 py-1.5 text-[13px];
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full bg-desk px-2.5 py-0.5 text-[12px] font-semibold leading-5 text-slatechip;
+  }
+  .chip-amber {
+    @apply bg-amber-soft text-amber-deep;
+  }
+  .eyebrow {
+    @apply text-[12px] font-semibold tracking-[0.01em] text-graphite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Estimating loader: production strips slide onto the board in turn, then the board resets. */
+@keyframes strip-in {
+  0% { transform: scaleX(0); opacity: 0; }
+  18%, 78% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+.strip-in {
+  transform-origin: left;
+  animation: strip-in 2.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite both;
+}

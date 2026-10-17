@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Everything under a user's own folder (projects and their scenes) is private to that user.
+    match /users/{uid}/{document=**} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid}/projects/{projectId} {
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.type in ['FILM', 'SERIES']
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        // A film can't become a series (or back) once it has scenes filed under it.
+        && (resource == null || request.resource.data.type == resource.data.type);
+
+      match /scenes/{sceneId} {
+        allow create, update: if request.auth != null && request.auth.uid == uid
+          && request.resource.data.totalUsd is number
+          && request.resource.data.totalUsd >= 0
+          && (request.resource.data.season == null
+              || (request.resource.data.season is int && request.resource.data.season >= 1
+                  && request.resource.data.episode is int && request.resource.data.episode >= 1));
+
+        // Candidate location photos: a compressed JPEG data URL plus its audit and rate-card price.
+        match /locations/{locationId} {
+          allow create, update: if request.auth != null && request.auth.uid == uid
+            && request.resource.data.image is string
+            && request.resource.data.image.size() < 700000
+            && request.resource.data.pricing.total_extra_usd is number
+            && request.resource.data.pricing.total_extra_usd >= 0;
+        }
+      }
+    }
+  }
+}
