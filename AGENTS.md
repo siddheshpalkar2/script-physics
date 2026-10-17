@@ -7,8 +7,8 @@ The product runs three single-purpose agents. Each one has a role-playing system
 | Agent | Endpoint | Model | System prompt | Output schema |
 |---|---|---|---|---|
 | **Scene Compiler** (line producer + 1st AD) | `POST /api/compile-scene` | `gemini-2.5-flash` | `COMPILER_SYSTEM_PROMPT` | `SceneBreakdownSchema` |
-| **Budget Rewriter** (line producer) | `POST /api/optimize-scene` | `gemini-2.5-pro` | `REWRITE_SYSTEM_PROMPT` | `BudgetRewriteSchema` |
-| **Location Scout** (location manager + gaffer, vision) | `POST /api/audit-location` | `gemini-2.5-pro` | `LOCATION_SYSTEM_PROMPT` | `LocationAuditSchema` |
+| **Budget Rewriter** (line producer) | `POST /api/optimize-scene` | `GEMINI_SMART_MODEL` | `REWRITE_SYSTEM_PROMPT` | `BudgetRewriteSchema` |
+| **Location Scout** (location manager + gaffer, vision) | `POST /api/audit-location` | `GEMINI_SMART_MODEL` | `LOCATION_SYSTEM_PROMPT` | `LocationAuditSchema` |
 
 - **Scene Compiler.** Reads one scene plus the target city and any producer-fixed values (set, time of day, cast, extras). It returns:
   - the scene heading, INT/EXT, time of day, page eighths, base setup hours, and cast and extras counts;
@@ -18,6 +18,8 @@ The product runs three single-purpose agents. Each one has a role-playing system
   Afterwards, `keep_quoted_triggers()` drops any item whose quote isn't in the scene, `apply_overrides()` lets the user's values win, and `calculate_deterministic_budget()` prices the result.
 - **Budget Rewriter.** Rewrites the scene's blocking to hit a target cost cut (default 60%, allowed 10–90%) while keeping at least 95% of the dialogue. It returns `alternatives`, each with a strategy name, a single-scene Fountain rewrite, the on-set changes, the hours saved and why the drama survives. The frontend prices the first alternative by sending it back through the Scene Compiler.
 - **Location Scout.** Looks at one location photo against the scene. It returns a fit score (0–100), a one-line summary, a practical-vs-VFX verdict and `hazards`. Each hazard has a type, a severity, the visual evidence, the equipment needed and extra setup hours. `price_location_audit()` prices it as `location_hazards[type] × SEVERITY_MULT[severity] + hours × base_crew_hour_usd`. `POST /api/price-location` re-prices a saved audit for another city without calling the agent again.
+
+Models: `GEMINI_FAST_MODEL` (default `gemini-2.5-flash`) and `GEMINI_SMART_MODEL` (default `gemini-3.1-pro-preview`, which needs a credit-funded key) env vars.
 
 Rules every agent follows:
 - **Untrusted input.** The scene is fenced in `<scene>` tags, and each system prompt says never to follow instructions inside it (or inside the image).

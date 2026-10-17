@@ -3,14 +3,14 @@
 # ScriptPhysics AI: Screenplay Production-Physics & Line-Budget Compiler
 ### Built for Google Cloud AI Builder Cup 2026 (Track: Media, Content & Digital Experiences)
 
-**ScriptPhysics AI** is an "IDE for Showrunners & Line Producers" that treats screenplays like source code—compiling natural-language scenes into deterministic physical shoot budgets, union schedule penalties, multimodal location scout risk audits, and budget-preserving script rewrites powered by **Gemini 2.5 Flash & Pro** on **Google Cloud Run** and **Firebase**.
+**ScriptPhysics AI** is an "IDE for Showrunners & Line Producers" that treats screenplays like source code—compiling natural-language scenes into deterministic physical shoot budgets, union schedule penalties, multimodal location scout risk audits, and budget-preserving script rewrites powered by **Gemini 2.5 Flash & Gemini 3.1 Pro** on **Google Cloud Run** and **Firebase**.
 
 ---
 
 ## Architecture Highlights
 1. **Semantic Extraction (`gemini-2.5-flash`) + Deterministic Math Engine:** Eliminates LLM arithmetic hallucinations. Gemini extracts structured physical production multipliers (`SceneBreakdownSchema`), while a deterministic regional rate-card engine computes exact costs across **Mumbai, Singapore, Tokyo, and Seoul**.
-2. **Multimodal Location Scout Auditor (`gemini-2.5-pro`):** Users upload up to 3 candidate location photos per scene. Each one is checked against the scene's time of day, action and dialogue to flag hazards such as blackout tenting, HMI rigging and acoustic ADR. The model names each hazard and its severity, and the city rate card prices it. The chosen location's cost is added to the scene budget.
-3. **Budget-Preserving Rewrite Engine (`gemini-2.5-pro`):** Rewrites expensive scene blocking using proven filmmaking containment techniques (post-rain wet-downs, tight telephoto compression, off-screen acoustic implication), targeting a **60%** cost cut while keeping at least 95% of the dialogue. Users can edit the rewrite and re-price it.
+2. **Multimodal Location Scout Auditor (Gemini vision):** Users upload up to 3 candidate location photos per scene. Each one is checked against the scene's time of day, action and dialogue to flag hazards such as blackout tenting, HMI rigging and acoustic ADR. The model names each hazard and its severity, and the city rate card prices it. The chosen location's cost is added to the scene budget.
+3. **Budget-Preserving Rewrite Engine (Gemini):** Rewrites expensive scene blocking using proven filmmaking containment techniques (post-rain wet-downs, tight telephoto compression, off-screen acoustic implication), targeting a **60%** cost cut while keeping at least 95% of the dialogue. Users can edit the rewrite and re-price it.
 
 ## Features
 - **Google sign-in.** Each user's work is private, and Firestore security rules enforce it.

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AlertTriangle, Check, ImagePlus, MapPin, Pencil, RotateCcw, Trash2 } from "lucide-react";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -326,7 +326,18 @@ function EstimatingSheet({ steps }) {
 
 export default function App() {
   const [user, setUser] = useState(undefined); // undefined = still checking session
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
+  const signedIn = useRef(false);
+  useEffect(
+    () =>
+      onAuthStateChanged(auth, (u) => {
+        // Signing out (button, expired session, another tab) drops the private /p/... URL. Opening a deep link
+        // while signed out keeps it, so sign-in still lands on the page that was asked for.
+        if (signedIn.current && !u) window.history.replaceState(null, "", urlOf(HOME));
+        signedIn.current = !!u;
+        setUser(u);
+      }),
+    []
+  );
   // Session check: a quiet splash instead of a blank page.
   if (user === undefined)
     return (
