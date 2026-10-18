@@ -104,23 +104,26 @@ export function AppHeader({ user, crumbs = [], children, width = "max-w-[1100px]
             </ol>
           </nav>
         </div>
-        {children && <div className="flex w-full flex-wrap items-end gap-3 sm:ml-auto sm:w-auto">{children}</div>}
-        {/* On phones the sign-out collapses to an avatar in the top-right corner. */}
-        <button
-          type="button"
-          onClick={() => signOut(auth)}
-          className="btn-secondary pl-2 max-sm:absolute max-sm:right-4 max-sm:top-3.5 max-sm:min-h-0 max-sm:border-transparent max-sm:p-1"
-          title={`Sign out ${user.email ?? ""}`}
-        >
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-ledger text-[11px] font-bold text-white"
-            aria-hidden
+        {/* Page controls and sign-out stay in one group so the header never re-wraps as data loads. */}
+        <div className={`flex w-full flex-wrap items-end justify-end gap-3 sm:ml-auto sm:w-auto ${children ? "" : "max-sm:contents"}`}>
+          {children}
+          {/* On phones the sign-out collapses to an avatar in the top-right corner. */}
+          <button
+            type="button"
+            onClick={() => signOut(auth)}
+            className="btn-secondary pl-2 max-sm:absolute max-sm:right-4 max-sm:top-3.5 max-sm:min-h-0 max-sm:border-transparent max-sm:p-1"
+            title={`Sign out ${user.email ?? ""}`}
           >
-            {initialsOf(user.displayName)}
-          </span>
-          <span className="max-sm:sr-only">Sign out</span>
-          <LogOut className="h-4 w-4 text-graphite max-sm:hidden" aria-hidden />
-        </button>
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-ledger text-[11px] font-bold text-white"
+              aria-hidden
+            >
+              {initialsOf(user.displayName)}
+            </span>
+            <span className="max-sm:sr-only">Sign out</span>
+            <LogOut className="h-4 w-4 text-graphite max-sm:hidden" aria-hidden />
+          </button>
+        </div>
       </div>
     </header>
   );

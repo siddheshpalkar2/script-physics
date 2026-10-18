@@ -835,7 +835,7 @@ function SceneWorkspace({ user, hubs, project, scenes, scene, newSceneEpisode, o
             value={docId}
             onChange={(e) => onOpenScene(e.target.value)}
             disabled={!!busy}
-            className="field w-full min-w-0 sm:max-w-[22rem]"
+            className="field w-full min-w-0 sm:w-[20rem]"
           >
             <option value="">+ New scene</option>
             {isSeries
@@ -865,7 +865,7 @@ function SceneWorkspace({ user, hubs, project, scenes, scene, newSceneEpisode, o
             value={hub}
             onChange={(e) => handleHubChange(e.target.value)}
             disabled={!!busy || rewriteDraft !== null}
-            className="field w-full min-w-0 sm:max-w-[18rem]"
+            className="field w-full min-w-0 sm:w-[16rem]"
           >
             {Object.entries(hubs).map(([id, h]) => (
               <option key={id} value={id}>
